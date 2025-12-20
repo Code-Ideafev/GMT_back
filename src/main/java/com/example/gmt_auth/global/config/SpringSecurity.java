@@ -1,5 +1,6 @@
 package com.example.gmt_auth.global.config;
 
+import com.example.gmt_auth.domain.auth.repository.UserRepository;
 import com.example.gmt_auth.global.jwt.JWTFilter;
 import com.example.gmt_auth.global.jwt.JWTUtil;
 import com.example.gmt_auth.global.jwt.LoginFilter;
@@ -34,7 +35,7 @@ public class SpringSecurity {
     public SecurityFilterChain springSecurityFilterChain(HttpSecurity http) throws Exception {
         AuthenticationManager authenticationManager = authenticationManager();
 
-        LoginFilter loginFilter = new LoginFilter(authenticationManager, jwtUtil);
+        LoginFilter loginFilter = new LoginFilter(authenticationManager, JwtUtil);
         loginFilter.setFilterProcessesUrl("/user/login");
 
         http
@@ -47,15 +48,13 @@ public class SpringSecurity {
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/post/**", "/suspect/**", "/vote/**").authenticated()
+                        .requestMatchers("/timer/**").authenticated()
                         .anyRequest().authenticated()
                 )
 
-                // LoginFilter를 UsernamePasswordAuthenticationFilter 위치에 등록
                 .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class)
 
-                // JWTFilter는 LoginFilter 앞에 등록
-                .addFilterBefore(new JWTFilter(jwtUtil, userRepository),
+                .addFilterBefore(new JWTFilter(JwtUtil, userRepository),
                         LoginFilter.class);
 
         return http.build();
