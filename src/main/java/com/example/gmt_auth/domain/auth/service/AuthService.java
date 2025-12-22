@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.List;
 
 @Service
@@ -18,7 +19,8 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JWTUtil jwtUtil;
-    private final JavaMailSender mailSender;
+
+    private static final SecureRandom secureRandom = new SecureRandom();
 
     public void join(JoinDto joinDto) {
         if (userRepository.findByUsername(joinDto.getUsername()).isPresent()) {
