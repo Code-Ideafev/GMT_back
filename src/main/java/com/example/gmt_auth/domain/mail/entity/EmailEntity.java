@@ -21,4 +21,18 @@ public class EmailEntity {
     private String email;
     private String code;
     private LocalDateTime expiredAt;
+    private boolean verified;
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public void setCode(String code) {
+        this.code = code;
+    }
+    public void setExpiredAt(LocalDateTime expiredAt) {
+        this.expiredAt = expiredAt;
+    }
+    public void setVerified(boolean verified) {
+        this.verified = verified;
+    }
 }
