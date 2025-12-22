@@ -7,6 +7,8 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Random;
+
 @Entity
 @NoArgsConstructor
 @Getter
@@ -18,6 +20,8 @@ public class UserEntity {
     private String username;
     private String email;
     private String password;
+    private String profileImageUrl;
+    private String code;
 
     public void setUsername(String username) {
         this.username = username;
@@ -28,4 +32,5 @@ public class UserEntity {
     public void setPassword(String password) {
         this.password = password;
     }
+    public void setProfileImageUrl(String profileImageUrl) {this.profileImageUrl = profileImageUrl;}
 }
