@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Random;
 
 @Entity
@@ -22,6 +23,7 @@ public class UserEntity {
     private String password;
     private String profileImageUrl;
     private String code;
+    private LocalDateTime expiredAt;
 
     public void setUsername(String username) {
         this.username = username;
@@ -33,4 +35,6 @@ public class UserEntity {
         this.password = password;
     }
     public void setProfileImageUrl(String profileImageUrl) {this.profileImageUrl = profileImageUrl;}
+    public void setCode(String code) {this.code = code;}
+    public void setExpiredAt(LocalDateTime expiredAt) {this.expiredAt = expiredAt;}
 }

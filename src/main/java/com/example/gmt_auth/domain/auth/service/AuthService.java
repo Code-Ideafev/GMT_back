@@ -18,6 +18,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JWTUtil jwtUtil;
+    private final JavaMailSender mailSender;
 
     public void join(JoinDto joinDto) {
         if (userRepository.findByUsername(joinDto.getUsername()).isPresent()) {
