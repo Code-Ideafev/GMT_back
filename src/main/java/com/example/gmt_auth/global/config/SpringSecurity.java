@@ -23,7 +23,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 
 @Configuration
-@EnableMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SpringSecurity {
 
@@ -31,8 +31,10 @@ public class SpringSecurity {
     private final UserRepository userRepository;
 
     @Bean
-    public SecurityFilterChain springSecurityFilterChain(HttpSecurity http) throws Exception {
-        AuthenticationManager authenticationManager = authenticationManager(null);
+    public SecurityFilterChain springSecurityFilterChain(HttpSecurity http,
+                                                         AuthenticationConfiguration authConfig) throws Exception {
+
+        AuthenticationManager authenticationManager = authConfig.getAuthenticationManager();
 
         LoginFilter loginFilter = new LoginFilter(authenticationManager, jwtUtil);
         loginFilter.setFilterProcessesUrl("/user/login");
@@ -60,10 +62,8 @@ public class SpringSecurity {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration authenticationConfiguration
-    ) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
@@ -79,9 +79,5 @@ public class SpringSecurity {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 }
+
