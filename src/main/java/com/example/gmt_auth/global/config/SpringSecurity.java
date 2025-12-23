@@ -11,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,21 +24,22 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 
 @Configuration
+@EnableWebSecurity
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SpringSecurity {
 
     private final JWTUtil jwtUtil;
     private final UserRepository userRepository;
+    private final AuthenticationConfiguration authConfig;
 
     @Bean
-    public SecurityFilterChain springSecurityFilterChain(HttpSecurity http,
-                                                         AuthenticationConfiguration authConfig) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        AuthenticationManager authenticationManager = authConfig.getAuthenticationManager();
+        AuthenticationManager authenticationManager = authenticationManager(authConfig);
 
         LoginFilter loginFilter = new LoginFilter(authenticationManager, jwtUtil);
-        loginFilter.setFilterProcessesUrl("/user/login");
+        loginFilter.setFilterProcessesUrl("/auth/login");
 
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
@@ -49,7 +51,6 @@ public class SpringSecurity {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/join", "/auth/login", "/email/**").permitAll()
-                        .requestMatchers("/timer/**", "/auth/me/**", "/auth/list").authenticated()
                         .anyRequest().authenticated()
                 )
                 .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class)
@@ -59,6 +60,11 @@ public class SpringSecurity {
                 );
 
         return http.build();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
 
     @Bean
@@ -80,4 +86,3 @@ public class SpringSecurity {
         return source;
     }
 }
-
