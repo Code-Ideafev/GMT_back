@@ -8,6 +8,8 @@ import com.example.gmt_auth.domain.mail.entity.EmailEntity;
 import com.example.gmt_auth.domain.mail.repository.EmailRepository;
 import com.example.gmt_auth.domain.mail.service.EmailService;
 import com.example.gmt_auth.global.jwt.JWTUtil;
+import com.example.gmt_auth.domain.auth.dto.RockModeDto;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AuthService {
 
     private final UserRepository userRepository;
@@ -119,5 +122,13 @@ public class AuthService {
     private String generateCode() {
         int code = secureRandom.nextInt(900000) + 100000;
         return String.valueOf(code);
+    }
+
+    public void setRockMode(String email, RockModeDto rockModeDto) {
+        UserEntity user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("유저 없음"));
+
+        user.setRockMode(rockModeDto.isRockMode());
+        userRepository.save(user);
     }
 }

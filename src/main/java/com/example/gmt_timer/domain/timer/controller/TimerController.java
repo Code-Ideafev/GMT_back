@@ -1,16 +1,11 @@
 package com.example.gmt_timer.domain.timer.controller;
 
 import com.example.gmt_auth.domain.auth.dto.CustomUserDetails;
-import com.example.gmt_auth.domain.auth.repository.UserRepository;
-import com.example.gmt_auth.global.jwt.JWTUtil;
+import com.example.gmt_auth.domain.auth.dto.RockModeDto;
 import com.example.gmt_timer.domain.timer.dto.TimerResponseDto;
-import com.example.gmt_timer.domain.timer.entity.TimerEntity;
 import com.example.gmt_timer.domain.timer.service.TimerService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -48,5 +43,11 @@ public class TimerController {
                 .stream()
                 .map(TimerResponseDto::new)
                 .toList();
+    }
+
+    @PostMapping("/rock")
+    public boolean rock(@RequestBody RockModeDto rockModeDto) {
+        timerService.rockMode(rockModeDto);
+        return true;
     }
 }

@@ -29,6 +29,7 @@ public class UserEntity {
     private String code;
     private LocalDateTime expiredAt;
     private String newPassword;
+    private boolean rockMode;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
@@ -47,4 +48,8 @@ public class UserEntity {
     public void setCode(String code) {this.code = code;}
     public void setExpiredAt(LocalDateTime expiredAt) {this.expiredAt = expiredAt;}
     public void setNewPassword(String newPassword) {this.newPassword = newPassword;}
+    public void setRockMode(boolean rockMode) {this.rockMode = rockMode;}
+    public boolean isRockMode() {
+        return rockMode;
+    }
 }

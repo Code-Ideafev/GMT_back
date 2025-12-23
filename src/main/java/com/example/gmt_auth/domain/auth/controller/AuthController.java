@@ -1,10 +1,12 @@
 package com.example.gmt_auth.domain.auth.controller;
 
+import com.example.gmt_auth.domain.auth.dto.CustomUserDetails;
 import com.example.gmt_auth.domain.auth.dto.JoinDto;
 import com.example.gmt_auth.domain.auth.dto.MeDto;
 import com.example.gmt_auth.domain.auth.dto.ResetPasswordDto;
 import com.example.gmt_auth.domain.auth.entity.UserEntity;
 import com.example.gmt_auth.domain.auth.service.AuthService;
+import com.example.gmt_auth.domain.auth.dto.RockModeDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -52,5 +54,12 @@ public class AuthController {
     @GetMapping("/list")
     public List<UserEntity> findAll() {
         return authService.userList();
+    }
+
+    @PostMapping("/rock")
+    public void rockMode(@RequestBody RockModeDto rockModeDto, @AuthenticationPrincipal CustomUserDetails userDetails)
+    {
+        String email = userDetails.getUsername();
+        authService.setRockMode(email, rockModeDto);
     }
 }

@@ -2,6 +2,7 @@ package com.example.gmt_timer.domain.timer.service;
 
 import com.example.gmt_auth.domain.auth.entity.UserEntity;
 import com.example.gmt_auth.domain.auth.repository.UserRepository;
+import com.example.gmt_auth.domain.auth.dto.RockModeDto;
 import com.example.gmt_timer.domain.timer.entity.TimerEntity;
 import com.example.gmt_timer.domain.timer.repository.TimerRepository;
 import org.springframework.stereotype.Service;
@@ -81,5 +82,9 @@ public class TimerService {
             time.append(s).append("초");
         }
         return time.toString().trim();
+    }
+
+    public void rockMode(RockModeDto rockModeDto) {
+        // rockModeDto 사용
     }
 }
