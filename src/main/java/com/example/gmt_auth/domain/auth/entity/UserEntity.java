@@ -24,6 +24,7 @@ public class UserEntity {
     private String profileImageUrl;
     private String code;
     private LocalDateTime expiredAt;
+    private String newPassword;
 
     public void setUsername(String username) {
         this.username = username;
@@ -37,4 +38,5 @@ public class UserEntity {
     public void setProfileImageUrl(String profileImageUrl) {this.profileImageUrl = profileImageUrl;}
     public void setCode(String code) {this.code = code;}
     public void setExpiredAt(LocalDateTime expiredAt) {this.expiredAt = expiredAt;}
+    public void setNewPassword(String newPassword) {this.newPassword = newPassword;}
 }
