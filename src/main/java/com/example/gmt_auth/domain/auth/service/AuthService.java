@@ -29,13 +29,8 @@ public class AuthService {
     private static final SecureRandom secureRandom = new SecureRandom();
 
     public void join(JoinDto joinDto) {
+        // 이메일 인증 체크 제거 (회원가입 시에는 불필요)
 
-        EmailEntity auth = emailAuthRepository
-                .findTopByEmailOrderByExpiredAtDesc(joinDto.getEmail())
-                .orElseThrow(() -> new RuntimeException("이메일 인증 필요"));
-        if (!auth.isVerified()) {
-            throw new RuntimeException("이메일 인증 미완료");
-        }
         if (userRepository.findByUsername(joinDto.getUsername()).isPresent()) {
             throw new RuntimeException("이미 존재하는 아이디");
         }
@@ -60,7 +55,6 @@ public class AuthService {
     }
 
     public void updateProfile(MeDto meDto, String username) {
-
         UserEntity user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
@@ -102,6 +96,26 @@ public class AuthService {
 
         auth.setVerified(true);
         emailAuthRepository.save(auth);
+    }
+
+    // 비밀번호 재설정 메서드 추가
+    public void resetPassword(String email, String newPassword) {
+
+        EmailEntity auth = emailAuthRepository
+                .findTopByEmailOrderByExpiredAtDesc(email)
+                .orElseThrow(() -> new RuntimeException("이메일 인증 필요"));
+
+        if (!auth.isVerified()) {
+            throw new RuntimeException("이메일 인증 미완료");
+        }
+
+        UserEntity user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+
+        emailAuthRepository.delete(auth);
     }
 
     private String generateCode() {
