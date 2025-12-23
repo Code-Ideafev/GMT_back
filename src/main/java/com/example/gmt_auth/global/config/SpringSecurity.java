@@ -50,7 +50,11 @@ public class SpringSecurity {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/join", "/auth/login", "/email/**").permitAll()
+
+                        .requestMatchers("/auth/join", "/auth/login", "/auth/reset-password", "/email/**").permitAll()
+
+                        .requestMatchers("/auth/me/**").authenticated()
+                        .requestMatchers("/auth/list").authenticated()
                         .anyRequest().authenticated()
                 )
                 .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class)

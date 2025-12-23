@@ -98,7 +98,6 @@ public class AuthService {
         emailAuthRepository.save(auth);
     }
 
-    // 비밀번호 재설정 메서드 추가
     public void resetPassword(String email, String newPassword) {
 
         EmailEntity auth = emailAuthRepository

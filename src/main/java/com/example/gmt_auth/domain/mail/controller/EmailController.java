@@ -22,14 +22,14 @@ public class EmailController {
     private final AuthService authService;
 
     @PostMapping("/send")
-    public ResponseEntity<Void> sendEmailCode(EmailSendDto emailSendDto) {
+    public ResponseEntity<Void> sendEmailCode(@RequestBody EmailSendDto emailSendDto) {
 
         authService.sendEmailAuthCode(emailSendDto.getEmail());
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/verify")
-    public ResponseEntity<Void> verifyEmailCode(EmailVerifyDto emailVerifyDto) {
+        @PostMapping("/verify")
+    public ResponseEntity<Void> verifyEmailCode(@RequestBody EmailVerifyDto emailVerifyDto) {
 
         authService.verifyEmailAuthCode(emailVerifyDto.getEmail(), emailVerifyDto.getCode());
         return ResponseEntity.ok().build();
